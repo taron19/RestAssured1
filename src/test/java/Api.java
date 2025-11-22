@@ -1,4 +1,6 @@
+import io.restassured.RestAssured;
 import io.restassured.http.Header;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -14,13 +16,19 @@ public class Api {
     private static final int SUCCESS_CODE_CREATION = 201;
     private static final int DATA_ABSENCE = 204;
 
+
+    @BeforeAll
+    static void setup() {
+        RestAssured.baseURI = "https://reqres.in";
+    }
+
     @Test
-    void emailOfTheFirstUserShouldBeCorrect() {
+    void shouldReturnCorrectEmailOfFirstUser() {
         given()
                 .header(HEADER)
                 .log().uri()
                 .when()
-                .get(" https://reqres.in/api/users")
+                .get("/api/users")
                 .then()
                 .log().body()
                 .statusCode(SUCCESS_CODE)
@@ -34,7 +42,7 @@ public class Api {
                 .header(HEADER)
                 .log().method()
                 .when()
-                .get(" https://reqres.in/api/users")
+                .get("/api/users")
                 .then()
                 .log().body()
                 .statusCode(SUCCESS_CODE)
@@ -43,14 +51,14 @@ public class Api {
     }
 
     @Test
-    void addCorrectUser() {
+    void shouldAddUser() {
         given()
                 .header(HEADER)
                 .body(BODY_ADD)
                 .contentType(JSON)
                 .log().body()
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/api/users")
                 .then()
                 .log().status()
                 .statusCode(SUCCESS_CODE_CREATION)
@@ -61,13 +69,13 @@ public class Api {
     }
 
     @Test
-    void deleteUserWhoDoesntExist() {
+    void shouldDeleteUser() {
 
         given()
                 .header(HEADER)
                 .log().uri()
                 .when()
-                .delete("https://reqres.in/api/users/2")
+                .delete("/api/users/2")
                 .then()
                 .log().status()
                 .statusCode(DATA_ABSENCE);
@@ -75,7 +83,7 @@ public class Api {
     }
 
     @Test
-    void updateExistingUser() {
+    void shouldUpdateUser() {
 
         given()
                 .header(HEADER)
@@ -83,7 +91,7 @@ public class Api {
                 .contentType(JSON)
                 .log().body()
                 .when()
-                .put("https://reqres.in/api/users/2")
+                .put("/api/users/2")
                 .then()
                 .log().status()
                 .statusCode(SUCCESS_CODE)
