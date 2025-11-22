@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.*;
 
 public class Api {
 
-    private static final Header header = new Header("x-api-key", "reqres-free-v1");
+    private static final Header HEADER = new Header("x-api-key", "reqres-free-v1");
     private static final String BODY_ADD = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
     private static final String BODY_PUT = "{ \"name\": \"Samson\", \"job\": \"lead\" }";
     private static final int SUCCESS_CODE = 200;
@@ -17,8 +17,8 @@ public class Api {
     @Test
     void emailOfTheFirstUserShouldBeCorrect() {
         given()
-                .header(header)
-                .log().body()
+                .header(HEADER)
+                .log().uri()
                 .when()
                 .get(" https://reqres.in/api/users")
                 .then()
@@ -31,8 +31,8 @@ public class Api {
     @Test
     void sizeOfArrayShouldBeCorrect() {
         given()
-                .header(header)
-                .log().body()
+                .header(HEADER)
+                .log().method()
                 .when()
                 .get(" https://reqres.in/api/users")
                 .then()
@@ -45,7 +45,7 @@ public class Api {
     @Test
     void addCorrectUser() {
         given()
-                .header(header)
+                .header(HEADER)
                 .body(BODY_ADD)
                 .contentType(JSON)
                 .log().body()
@@ -64,8 +64,8 @@ public class Api {
     void deleteUserWhoDoesntExist() {
 
         given()
-                .header(header)
-                .log().body()
+                .header(HEADER)
+                .log().uri()
                 .when()
                 .delete("https://reqres.in/api/users/2")
                 .then()
@@ -78,7 +78,7 @@ public class Api {
     void updateExistingUser() {
 
         given()
-                .header(header)
+                .header(HEADER)
                 .body(BODY_PUT)
                 .contentType(JSON)
                 .log().body()
