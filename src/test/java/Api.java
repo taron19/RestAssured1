@@ -14,10 +14,13 @@ public class Api {
 
     private static final UserJson USER = new UserJson("morpheus", "leader");
     private static final UserJson USER_PUT = new UserJson("Samson", "lead");
+    private static final UserRegistration USER_PUT2 = new UserRegistration("eve.holt@reqres.in", "cityslicka");
     private static final int SUCCESS_CODE = 200;
     private static final int SUCCESS_CODE_CREATION = 201;
     private static final int DATA_ABSENCE = 204;
     private static final String URL = "/api/users";
+    private static final String URL_LOGIN = "/api/login";
+    private static final String UNKNOWN = "/api/unknown/23";
     private static RequestSpecification requestSpecification;
 
 
@@ -99,5 +102,46 @@ public class Api {
                 .body("name", equalTo("Samson"))
                 .body("job", equalTo("lead"))
                 .body("updatedAt", notNullValue());
+    }
+
+
+    @Test
+    void shoudReturn400Status() {
+
+
+        given()
+                .spec(requestSpecification)
+                .body("{\"email\": \"peter@klaven\"}")
+                .when()
+                .post(URL_LOGIN)
+                .then()
+                .statusCode(400)
+                .body("error", equalTo("Missing password"));
+    }
+
+    @Test
+    void shoudReturnEmpty404Status() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .get(UNKNOWN)
+                .then()
+                .statusCode(404)
+                .body(equalTo("{}"));
+    }
+
+
+    @Test
+    void shoudSuccessfullyLoginWith200Status() {
+
+        given()
+                .spec(requestSpecification)
+                .body(USER_PUT2)
+                .when()
+                .post(URL_LOGIN)
+                .then()
+                .statusCode(SUCCESS_CODE)
+                .body("token",equalTo("QpwL5tke4Pnpja7X4"));
     }
 }
