@@ -1,7 +1,6 @@
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
-import io.restassured.http.Header;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
 
-public class Api {
+public class ApiTests {
 
     private static final UserJson USER = new UserJson("morpheus", "leader");
     private static final UserJson USER_PUT = new UserJson("Samson", "lead");
@@ -18,6 +17,7 @@ public class Api {
     private static final int SUCCESS_CODE = 200;
     private static final int SUCCESS_CODE_CREATION = 201;
     private static final int DATA_ABSENCE = 204;
+    private static final int ERROR_CODE = 401;
     private static final String URL = "/api/users";
     private static final String URL_LOGIN = "/api/login";
     private static final String UNKNOWN = "/api/unknown/23";
@@ -144,4 +144,23 @@ public class Api {
                 .statusCode(SUCCESS_CODE)
                 .body("token",equalTo("QpwL5tke4Pnpja7X4"));
     }
+
+
+    @Test
+    void shoudSUnuccessfullyUpdateWith401StatusUsingPatchRequest() {
+
+        given()
+                .spec(requestSpecification)
+                .body(USER)
+                .when()
+                .patch(URL+"/2")
+                .then()
+                .statusCode(ERROR_CODE)
+                .body("error",equalTo("api_key_required"))
+                .body("message",equalTo("Create your API key at https://app.reqres.in to access the ReqRes API."))
+                .body("signup_url",equalTo("https://app.reqres.in"));
+    }
+
+
+
 }
