@@ -147,7 +147,7 @@ public class ApiTests {
 
 
     @Test
-    void shoudSUnuccessfullyUpdateWith401StatusUsingPatchRequest() {
+    void shoudUnsuccessfullyUpdateWith401StatusUsingPatchRequest() {
 
         given()
                 .spec(requestSpecification)
