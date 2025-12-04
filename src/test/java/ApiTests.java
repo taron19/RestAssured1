@@ -28,7 +28,7 @@ public class ApiTests {
     static void setup() {
         RestAssured.baseURI = "https://reqres.in";
         requestSpecification = new RequestSpecBuilder().log(LogDetail.ALL)
-                .addHeader("x-api-key", "reqres-free-v1")
+                .addHeader("x-api-key", "reqres_0d00536c39c340afba2d53ca99735709")
                 .setContentType(JSON)
                 .build();
     }
@@ -155,10 +155,10 @@ public class ApiTests {
                 .when()
                 .patch(URL+"/2")
                 .then()
-                .statusCode(ERROR_CODE)
-                .body("error",equalTo("api_key_required"))
-                .body("message",equalTo("Create your API key at https://app.reqres.in to access the ReqRes API."))
-                .body("signup_url",equalTo("https://app.reqres.in"));
+                .statusCode(SUCCESS_CODE)
+                .body("name", equalTo("morpheus"))
+                .body("job", equalTo("leader"))
+                .body("updatedAt", notNullValue());
     }
 
 
